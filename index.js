@@ -90,6 +90,38 @@ app.put("/trains/:id", (req, res) => {
   });
 });
 
+app.delete("/trains/:id", (req, res) => {
+  const trainId = req.params.id;
+
+  fs.readFile("data/trains.json", "utf8", (err, data) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Wystąpił błąd podczas odczytu pliku.");
+    } else {
+      try {
+        const trainsData = JSON.parse(data);
+        const updatedTrainsData = trainsData.filter((train) => train.id !== Number(trainId));
+
+        if (trainsData.length === updatedTrainsData.length) {
+          res.status(404).send("Pociąg o podanym ID nie został znaleziony.");
+        } else {
+          fs.writeFile("data/trains.json", JSON.stringify(updatedTrainsData, null, 2), (err) => {
+            if (err) {
+              console.error(err);
+              res.status(500).send("Wystąpił błąd podczas zapisywania danych.");
+            } else {
+              res.status(204).send();
+            }
+          });
+        }
+      } catch (error) {
+        console.error(error);
+        res.status(500).send("Wystąpił błąd podczas parsowania danych JSON.");
+      }
+    }
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Serwer nasłuchuje na porcie ${PORT}`);
 });
