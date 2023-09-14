@@ -100,7 +100,7 @@ app.delete("/trains/:id", (req, res) => {
     } else {
       try {
         const trainsData = JSON.parse(data);
-        const updatedTrainsData = trainsData.filter((train) => train.id !== trainId);
+        const updatedTrainsData = trainsData.filter((train) => train.id !== Number(trainId));
 
         if (trainsData.length === updatedTrainsData.length) {
           res.status(404).send("Pociąg o podanym ID nie został znaleziony.");
