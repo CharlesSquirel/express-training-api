@@ -19,7 +19,7 @@ app.get('/trains', (req, res) => {
                 res.send(formattedData);
             }
             catch(err) {
-                console.error(error);
+                console.error(err);
                 res.status(500).send('Wystąpił błąd podczas parsowania danych JSON.');
             }
         }
